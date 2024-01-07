@@ -1,0 +1,26 @@
+@import url(https://fonts.googleapis.com/css?family=Varela+Round:regular);
+@import url(https://fonts.googleapis.com/css?family=Nova+Round:regular);
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Nova Round", "Varela Round";
+}
+
+.dark-theme {
+  background-color: rgb(31, 30, 30);
+  color: aliceblue;
+}
+
+.light-theme {
+  background-color: rgb(214, 212, 212);
+  color: rgb(7, 7, 7);
+}
