@@ -20,10 +20,10 @@ async function bootstrap() {
   const HOST = '0.0.0.0';
 
   await app.listen(PORT, HOST, () => {
-    console.log(`Server is running on port http://${HOST}:${PORT}`);
+    console.log(`Server is running on port http://192.168.1.200:${PORT}`);
 
   });
-  console.log(await app.getUrl());
+  // console.log(await app.getUrl()); // http://127.0.0.1:3030
 
 }
 bootstrap();

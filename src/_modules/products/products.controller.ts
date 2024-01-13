@@ -5,7 +5,6 @@ import { Request, Response, query } from "express";
 import { ProductCreateDto } from './dto/create.dto';
 import { ProductUpdateDto } from './dto/update.dto';
 import { ConfigService } from '@nestjs/config';
-import { join } from 'path';
 
 // the path will be http://192.168.1.200:3030/products
 @Controller('products')
@@ -71,7 +70,7 @@ export class ProductsController {
         @Res() res: Response,
         @Body() body: ProductCreateDto,
     ): any {
-        console.log("req: ", req.body.filter);
+        console.log("req: ", req.body);
         console.log("@Body: ", body);
         return res.status(201).json(body)
         // or to get entire json object .. {filter}

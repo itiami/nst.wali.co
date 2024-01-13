@@ -9,6 +9,12 @@ import { ConfigModule } from '@nestjs/config';
 import { MongodbServiceProvider } from './_providers/mongodb-service-provider/mongodb-service-provider';
 import { PostgresServiceProvider } from './_providers/postgres-service-provider/postgres-service-provider';
 import { OracleServiceProvider } from './_providers/oracle-service-provider/oracle-service-provider';
+import { TutoModule } from './_modules/tuto/tuto.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from "src/_con/ormConfig";
+import { MongooseModule } from '@nestjs/mongoose';
+import { DatastoreMongooseModule } from './datastore_mongoose/datastore_mongoose.module';
+import { DatastoreTypeormModule } from './datastore_typeorm/datastore_typeorm.module';
 
 
 @Module({
@@ -21,7 +27,12 @@ import { OracleServiceProvider } from './_providers/oracle-service-provider/orac
       rootPath: join(__dirname, '..', 'assets')
     }),
     ProductsModule,
-    AuthModule
+    AuthModule,
+    TutoModule,
+    TypeOrmModule.forRoot(typeOrmConfig),
+    MongooseModule.forRoot(process.env._NEST_MONGODB_DOCKER_STRING),
+    DatastoreMongooseModule,
+    DatastoreTypeormModule,
   ],
   controllers: [AppController],
   providers: [
@@ -29,7 +40,6 @@ import { OracleServiceProvider } from './_providers/oracle-service-provider/orac
     MongodbServiceProvider,
     PostgresServiceProvider,
     OracleServiceProvider,
-
   ],
 })
 

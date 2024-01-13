@@ -17,4 +17,14 @@ export class TwilioVoip {
     async getTwilioData() {
         return this.twilioClient;
     }
+
+
+    async sendSms(to: string, body: string): Promise<any> {
+        return this.twilioClient.messages.create({
+            body: body,
+            messagingServiceSid: this.config.get<string>('_TWILIO_MSG_ID'),
+            to: to
+        });
+    }
+
 }
