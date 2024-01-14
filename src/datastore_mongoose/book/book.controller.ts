@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from "express";
 import { IBook } from './book.interface';
 import { BookService } from './book.service';
@@ -75,7 +75,7 @@ export class BookController {
         } else {
             return res.status(404).json({
                 id: id,
-                msg: "Incorrect MongoDB Object"
+                msg: "Not a Valid MongoDB Object"
             })
         }
     }
@@ -118,6 +118,22 @@ export class BookController {
     ) {
         console.log(title);
         return await this.bookService.findOneQryStr(title);
+    }
+
+
+    // http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
+    @ApiOperation({ summary: "Delete and Update Author Schema" })
+    @Get("del/:id")
+    async deleteBook(
+        @Param('id') id: string,
+        @Res() res: Response
+    ) {
+        if (mongoose.isValidObjectId(id)) {
+            const result = await this.bookService.deleteBook(id);
+            return result.hasOwnProperty("msg") ? res.status(404).json(result) : res.status(201).json(result);
+        } else {
+            return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
+        }
     }
 
 

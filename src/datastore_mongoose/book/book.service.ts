@@ -5,6 +5,7 @@ import { IBook } from './book.interface';
 import { Book } from "./book-schema";
 import { IAuthor } from '../author/author.interface';
 import { Author } from '../author/author-schema';
+import { FactorInstance } from 'twilio/lib/rest/verify/v2/service/entity/factor';
 
 @Injectable()
 export class BookService {
@@ -104,8 +105,36 @@ export class BookService {
         return await this.bookModel.findByIdAndUpdate(id, book, { new: true }).exec();
     }
 
-    async delete(id: string): Promise<any> {
-        return await this.bookModel.findByIdAndDelete(id).exec();
+    async deleteBook(id: string): Promise<IBook | Object> {
+        const bookDta = await this.bookModel.findById(id).exec();
+        if (bookDta !== null) {
+            const removeBook = await this.bookModel.findByIdAndDelete(id);
+            const author = await this.authorModel.findById(bookDta.authorId);
+
+            // to update data from books array, and __v in Author table 
+            await this.authorModel.updateOne(
+                { _id: bookDta.authorId },
+                {
+                    // this built-in $pull from mongoDb is use to take item from array
+                    $pull: {
+                        books: bookDta._id
+                    },
+                    // this built-in $set from mongoDb is use to set a new value
+                    $set: {
+                        country: "France",
+                        __v: author && author.books.length - 1
+                    }
+                }
+            ).exec();
+
+            return {
+                msg: "The Book has beed deleted",
+                data: removeBook
+            };
+
+        } else {
+            return { msg: "not exists" }
+        }
     }
 
 }

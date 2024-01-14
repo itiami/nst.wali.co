@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 
 @ApiExcludeController()
-@Controller('data-manupulation')
+@Controller('data-manipulation')
 export class DataManupulationController {
 
     @Get()
@@ -53,6 +53,12 @@ export class DataManupulationController {
             entries
         })
     }
+
+    @Get('deleteFromArr')
+    deleteArr() {
+        return deleteFromArray();
+    }
+
 }
 
 
@@ -81,3 +87,12 @@ function getAllProducts() {
     ];
 }
 
+function deleteFromArray() {
+    const arr = ["65a422a8ebbcfa55a9238e27", "65a422b2ebbcfa55a9238e2d", "65a422bcebbcfa55a9238e33"];
+    const arrFilter = arr.filter((vel) => vel !== "65a422b2ebbcfa55a9238e2d");
+    const arrMap = arr.map((vel) => vel !== "65a422b2ebbcfa55a9238e2d");
+    return {
+        filter: arrFilter,
+        map: arrMap
+    }
+}
