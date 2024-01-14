@@ -110,6 +110,7 @@ export class BookService {
         if (bookDta !== null) {
             const removeBook = await this.bookModel.findByIdAndDelete(id);
             const author = await this.authorModel.findById(bookDta.authorId);
+            const countBooks = author.books.length;
 
             // to update data from books array, and __v in Author table 
             await this.authorModel.updateOne(
@@ -122,7 +123,7 @@ export class BookService {
                     // this built-in $set from mongoDb is use to set a new value
                     $set: {
                         country: "France",
-                        __v: author && author.books.length - 1
+                        __v: countBooks - 1
                     }
                 }
             ).exec();
