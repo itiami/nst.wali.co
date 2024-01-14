@@ -23,13 +23,12 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('DesiSoft by Swagger')
     .setDescription("API documentation by 'ABDULLAH al numan'")
-    .addTag("w3Soft")
     .setVersion('v2024.01')
     .build();
 
 
   const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, swaggerDoc);
+  SwaggerModule.setup('openApi', app, swaggerDoc);
 
 
   await app.listen(PORT, HOST, () => {

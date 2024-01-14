@@ -1,6 +1,10 @@
 import { Controller, Get, Res } from '@nestjs/common';
+import { ApiExcludeController } from '@nestjs/swagger';
 import { Request, Response } from "express";
 
+
+
+@ApiExcludeController()
 @Controller('data-manupulation')
 export class DataManupulationController {
 

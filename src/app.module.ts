@@ -15,6 +15,7 @@ import { typeOrmConfig } from "src/_con/ormConfig";
 import { MongooseModule } from '@nestjs/mongoose';
 import { DatastoreMongooseModule } from './datastore_mongoose/datastore_mongoose.module';
 import { DatastoreTypeormModule } from './datastore_typeorm/datastore_typeorm.module';
+import { SharedModule } from './_shared/_shared.module';
 
 
 @Module({
@@ -33,6 +34,7 @@ import { DatastoreTypeormModule } from './datastore_typeorm/datastore_typeorm.mo
     MongooseModule.forRoot(process.env._NEST_MONGODB_DOCKER_STRING),
     DatastoreMongooseModule,
     DatastoreTypeormModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [

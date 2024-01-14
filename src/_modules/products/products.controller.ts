@@ -5,7 +5,9 @@ import { Request, Response, query } from "express";
 import { ProductCreateDto } from './dto/create.dto';
 import { ProductUpdateDto } from './dto/update.dto';
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Product')
 // the path will be http://192.168.1.200:3030/products
 @Controller('products')
 export class ProductsController {

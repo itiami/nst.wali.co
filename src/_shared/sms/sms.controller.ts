@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response, query } from "express";
 import { TwilioVoip } from 'src/_providers/twilio-voip/twilio-voip';
 
-@Controller('sms')
+@ApiTags("Twilio SMS Module")
+@Controller('shared/sms')
 export class SmsController {
 
     constructor(
