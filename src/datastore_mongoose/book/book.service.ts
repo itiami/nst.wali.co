@@ -129,12 +129,13 @@ export class BookService {
             ).exec();
 
             return {
+                isDeleted: true,
                 msg: "The Book has beed deleted",
                 data: removeBook
             };
 
         } else {
-            return { msg: "not exists" }
+            return { isDeleted: false, msg: "not exists" }
         }
     }
 

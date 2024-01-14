@@ -121,20 +121,20 @@ export class BookController {
     }
 
 
-    // http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
-    @ApiOperation({ summary: "Delete and Update Author Schema" })
-    @Get("del/:id")
-    async deleteBook(
-        @Param('id') id: string,
-        @Res() res: Response
-    ) {
-        if (mongoose.isValidObjectId(id)) {
-            const result = await this.bookService.deleteBook(id);
-            return result.hasOwnProperty("msg") ? res.status(404).json(result) : res.status(201).json(result);
-        } else {
-            return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
-        }
+// http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
+@ApiOperation({ summary: "Delete and Update Author Schema" })
+@Get("del/:id")
+async deleteBook(
+    @Param('id') id: string,
+    @Res() res: Response
+) {
+    if (mongoose.isValidObjectId(id)) {
+        const result: any = await this.bookService.deleteBook(id);
+        return result.isDeleted ? res.status(201).json(result) : res.status(404).json(result);
+    } else {
+        return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
     }
+}
 
 
 }
