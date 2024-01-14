@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from "express";
 import { IBook } from './book.interface';
 import { BookService } from './book.service';
@@ -121,20 +121,36 @@ export class BookController {
     }
 
 
-// http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
-@ApiOperation({ summary: "Delete and Update Author Schema" })
-@Get("del/:id")
-async deleteBook(
-    @Param('id') id: string,
-    @Res() res: Response
-) {
-    if (mongoose.isValidObjectId(id)) {
-        const result: any = await this.bookService.deleteBook(id);
-        return result.isDeleted ? res.status(201).json(result) : res.status(404).json(result);
-    } else {
-        return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
+    // http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
+    @ApiOperation({ summary: "Update Book" })
+    @Put()
+    async updateBook(
+        @Body() body: any,
+        @Res() res: Response
+    ) {
+        if (mongoose.isValidObjectId(body.id)) {
+            const result: any = await this.bookService.updateBook(body.id, body.update);
+            return result.isDeleted ? res.status(201).json(result) : res.status(404).json(result);
+        } else {
+            return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
+        }
     }
-}
+
+
+    // http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
+    @ApiOperation({ summary: "Delete Book and Update Author Schema" })
+    @Delete("del/:id")
+    async deleteBook(
+        @Param('id') id: string,
+        @Res() res: Response
+    ) {
+        if (mongoose.isValidObjectId(id)) {
+            const result: any = await this.bookService.deleteBook(id);
+            return result.isDeleted ? res.status(201).json(result) : res.status(404).json(result);
+        } else {
+            return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
+        }
+    }
 
 
 }

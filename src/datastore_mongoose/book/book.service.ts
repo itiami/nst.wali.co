@@ -101,8 +101,18 @@ export class BookService {
         };
     }
 
-    async update(id: string, book: Book): Promise<IBook> {
-        return await this.bookModel.findByIdAndUpdate(id, book, { new: true }).exec();
+    async updateBook(id: string, newTitle: string): Promise<IBook | Object> {
+        const bookDta = await this.bookModel.findById(id).exec();
+        if (bookDta !== null) {
+            return this.bookModel.findByIdAndUpdate(
+                id,
+                { $set: { title: newTitle } },
+                { new: true }
+            );
+
+        } else {
+            return { isUpdated: false, msg: "not exists" }
+        }
     }
 
     async deleteBook(id: string): Promise<IBook | Object> {
@@ -125,7 +135,8 @@ export class BookService {
                         country: "France",
                         __v: countBooks - 1
                     }
-                }
+                },
+                { new: true }
             ).exec();
 
             return {
