@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from "express";
 import { IBook } from './book.interface';
 import { BookService } from './book.service';
 import { IAuthor } from '../author/author.interface';
 import mongoose from 'mongoose';
 import { title } from 'process';
+import { NactGuard } from 'src/_guard/nact/nact.guard';
 
 @Controller('book')
+@UseGuards(NactGuard)
 export class BookController {
 
     constructor(private bookService: BookService) { };

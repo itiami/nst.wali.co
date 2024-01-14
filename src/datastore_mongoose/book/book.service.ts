@@ -98,7 +98,6 @@ export class BookService {
                 doc: dt
             }
         };
-
     }
 
     async update(id: string, book: Book): Promise<IBook> {
