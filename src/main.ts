@@ -2,23 +2,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { ValidationPipe } from '@nestjs/common';
 
 
 async function bootstrap() {
-  // here by default the bodyParser: true so no need to use it.
-  //const app = await NestFactory.create(AppModule, { bodyParser: true });
-  const app = await NestFactory.create(AppModule,
-    {
-      rawBody: true
-    }
-  );
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   app.enableCors();
-
 
   const PORT = 3030;
   const HOST = '0.0.0.0';
 
+  app.useGlobalPipes(new ValidationPipe());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('DesiSoft by Swagger')

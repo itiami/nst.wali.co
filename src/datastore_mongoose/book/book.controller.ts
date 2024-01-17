@@ -1,11 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from "express";
-import { IBook } from './book.interface';
 import { BookService } from './book.service';
 import mongoose from 'mongoose';
 import { NactGuard } from 'src/_guard/nact/nact.guard';
-import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BookTitleDto, CreateBookDto, } from '../dto/book_author.dto';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BookDto, CreateBookDto, UpdateBookDto, } from '../dto/book_author.dto';
 
 
 @ApiTags("MongooseModule")
@@ -15,39 +14,28 @@ export class BookController {
 
     constructor(private bookService: BookService) { };
 
+    // Post Request Add Book and Author: 
+    // http://192.168.1.200:3030/book
     @ApiOperation({ summary: "Add New Book" })
-    @ApiBody({
-        type: CreateBookDto,
-        examples: {
-            book: {
-                value: {
-                    "book": {
-                        "title": "Ofiginal Fit"
-                    },
-                    "author": {
-                        "name": "James",
-                        "birthDate": "12/12/1965",
-                        "country": "UK"
-                    }
-                }
-            }
-        }
-
-    })
     @Post()
     async create(
         @Req() req: Request,
         @Res() res: Response,
-        @Body() body: any,
+        @Body() body: CreateBookDto,
     ) {
-        if (body.book.title && body.author.name) {
-            const addBook: any = await this.bookService.create(body.book, body.author);
-            return res.status(201).json(addBook);
-        } else {
-            return res.status(404).json({ msg: "Required Data has not found" });
+        try {
+            const addBook: any = await this.bookService.addBookAndAuthor(body.book, body.author);
+            return res.status(HttpStatus.CREATED).json(addBook);
+        } catch (err: any) {
+            return res.status(HttpStatus.BAD_REQUEST).header('Error', err.message)
+                .json({ msg: "Required Object Key not found" });
         }
     }
 
+
+
+    // Get Request Find All: 
+    // http://192.168.1.200:3030/book
     @ApiOperation({ summary: "Find All Books" })
     @Get()
     async findAll(
@@ -63,27 +51,25 @@ export class BookController {
         name: "id",
         example: "65a3072a8b95b3174cfdbe8f"
     })
-    @Get("query")
+    @Get("findById")
     async byId(
         @Query('id') id: string,
         @Res() res: Response
     ) {
-        if (mongoose.isValidObjectId(id)) {
+        try {
             const data = await this.bookService.findById(id);
-            console.log(data);
-            return res.status(201).json(data);
-        } else {
-            return res.status(404).json({
-                id: id,
-                msg: "Not a Valid MongoDB Object"
-            })
+            return res.status(HttpStatus.CREATED).json(data);
+        } catch (err: any) {
+            return res.status(HttpStatus.BAD_REQUEST).header('Error', err.message)
+                .json({ msg: "Required Object Key not found" });
         }
     }
 
 
+    // http://192.168.1.200:3030/book/Java
     @ApiOperation({ summary: "Find Book By Title" })
     @ApiBody({
-        type: BookTitleDto,
+        type: BookDto,
         examples: {
             book: {
                 value: {
@@ -111,7 +97,7 @@ export class BookController {
     }
 
 
-    // in url---  http://192.168.1.200:3030/book/travel
+    // http://192.168.1.200:3030/book/travel
     @Get(":title")
     async findOneQueryStr(
         @Param('title') title: string
@@ -125,7 +111,7 @@ export class BookController {
     @ApiOperation({ summary: "Update Book" })
     @Put()
     async updateBook(
-        @Body() body: any,
+        @Body() body: UpdateBookDto,
         @Res() res: Response
     ) {
         if (mongoose.isValidObjectId(body.id)) {
@@ -139,6 +125,7 @@ export class BookController {
 
     // http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
     @ApiOperation({ summary: "Delete Book and Update Author Schema" })
+    @ApiParam({ name: "id", example: "65a7f14789751b28c6064029" })
     @Delete("del/:id")
     async deleteBook(
         @Param('id') id: string,

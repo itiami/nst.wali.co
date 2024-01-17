@@ -1,7 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Book } from '../book/book-schema';
-import { IBook } from '../book/book.interface';
+import { Book, IBook } from '../book/book-schema';
+
+export interface IAuthor extends Document {
+    name: string;
+    birthDate: string;
+    country: string;
+    books: IBook[] | string[];
+}
+
 
 @Schema()
 export class Author {
