@@ -9,8 +9,12 @@ import { AuthorSchema } from './author/author-schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: "Book", schema: BookSchema }]),
-    MongooseModule.forFeature([{ name: "Author", schema: AuthorSchema }]),
+    MongooseModule.forFeature([
+      { name: "Book", schema: BookSchema }
+    ], "mongoDB_Docker"),
+    MongooseModule.forFeature([
+      { name: "Author", schema: AuthorSchema }
+    ], "mongoDB_Docker"),
   ],
   controllers: [AuthorController, BookController],
   providers: [AuthorService, BookService]

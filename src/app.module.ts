@@ -17,7 +17,6 @@ import { DatastoreMongooseModule } from './datastore_mongoose/datastore_mongoose
 import { DatastoreTypeormModule } from './datastore_typeorm/datastore_typeorm.module';
 import { SharedModule } from './_shared/_shared.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,7 +30,10 @@ import { SharedModule } from './_shared/_shared.module';
     AuthModule,
     TutoModule,
     TypeOrmModule.forRoot(typeOrmConfig),
-    MongooseModule.forRoot(process.env._NEST_MONGODB_DOCKER_STRING),
+    MongooseModule.forRoot(process.env._NEST_MONGODB_DOCKER_STRING,
+      { connectionName: "mongoDB_Docker" }),
+    MongooseModule.forRoot(process.env._NEST_MONGODB_ATLAS_STRING,
+      { connectionName: "mongoDB_Atlas" }),
     DatastoreMongooseModule,
     DatastoreTypeormModule,
     SharedModule,

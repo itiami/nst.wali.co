@@ -10,11 +10,11 @@ import { AuthorDto, BookDto } from '../dto/book_author.dto';
 export class BookService {
 
     constructor(
-        //@InjectModel('Book') private readonly bookModel: Model<IBook>,
-        //@InjectModel('Author') private readonly authorModel: Model<IAuthor>
+        //@InjectModel('Book', "mongoDB_Docker") private readonly bookModel: Model<IBook>,
+        //@InjectModel('Author', "mongoDB_Docker") private readonly authorModel: Model<IAuthor>
 
-        @InjectModel(Book.name) private readonly bookModel: Model<Book>,
-        @InjectModel(Author.name) private readonly authorModel: Model<Author>
+        @InjectModel(Book.name, "mongoDB_Docker") private readonly bookModel: Model<Book>,
+        @InjectModel(Author.name, "mongoDB_Docker") private readonly authorModel: Model<Author>
     ) { }
 
 

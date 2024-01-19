@@ -1,6 +1,5 @@
-import { ApiBody, ApiParam, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsMongoId, IsOptional, IsDate, IsObject } from 'class-validator';
-import { identity } from 'rxjs';
 
 export class AuthorDto {
     name: string;

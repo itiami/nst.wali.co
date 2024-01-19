@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, ObjectId } from 'mongoose';
-import { Author } from '../author/author-schema';
 import { IAuthor } from '../author/author-schema';
 
 

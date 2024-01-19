@@ -19,7 +19,6 @@ export class BookController {
     @ApiOperation({ summary: "Add New Book" })
     @Post()
     async create(
-        @Req() req: Request,
         @Res() res: Response,
         @Body() body: CreateBookDto,
     ) {
@@ -51,6 +50,10 @@ export class BookController {
         name: "id",
         example: "65a3072a8b95b3174cfdbe8f"
     })
+    @ApiResponse({
+        status: 201,
+        description: 'http://ip_port/book/query?id=65a3072a8b95b3174cfdbe8f'
+    })
     @Get("findById")
     async byId(
         @Query('id') id: string,
@@ -68,6 +71,7 @@ export class BookController {
 
     // http://192.168.1.200:3030/book/Java
     @ApiOperation({ summary: "Find Book By Title" })
+    @ApiResponse({ status: 201, description: 'http://ip_port/book/Java' })
     @ApiBody({
         type: BookDto,
         examples: {
@@ -79,11 +83,6 @@ export class BookController {
         }
 
     })
-    @ApiResponse({
-        status: 201,
-        description: "find Book by Title"
-    })
-
     @Post("findByTitle")
     async findByName(
         @Body() body: any
@@ -91,6 +90,8 @@ export class BookController {
         return await this.bookService.findByTitle(body.book);
     }
 
+
+    // // http://192.168.1.200:3030/book/
     @Post("findOne")
     async findOne(@Body() body: any) {
         return await this.bookService.findOneAndAggregate(body.book);
@@ -116,7 +117,8 @@ export class BookController {
     ) {
         if (mongoose.isValidObjectId(body.id)) {
             const result: any = await this.bookService.updateBook(body.id, body.update);
-            return result.isDeleted ? res.status(201).json(result) : res.status(404).json(result);
+            return result.isDeleted ? res.status(201).json(result)
+                : res.status(404).json(result);
         } else {
             return res.status(404).json({ msg: "Not a Valid MongoDB Object" })
         }
@@ -126,6 +128,10 @@ export class BookController {
     // http://192.168.1.200:3030/book/del/65a44c176e2e95f91069acac
     @ApiOperation({ summary: "Delete Book and Update Author Schema" })
     @ApiParam({ name: "id", example: "65a7f14789751b28c6064029" })
+    @ApiResponse({
+        status: 201,
+        description: 'http://ip_port/book/del/65a7f14789751b28c6064029'
+    })
     @Delete("del/:id")
     async deleteBook(
         @Param('id') id: string,
