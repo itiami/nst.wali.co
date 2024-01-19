@@ -9,13 +9,20 @@ export class PagginationService {
 
     constructor(@InjectModel(Paggination.name, "mongoDB_Atlas") private readonly paggModel: Model<Paggination>) { };
 
-    async findAll(limit: number) {
-        console.log(limit);
-        limit = limit < 10 ? limit : 10;
-        const dt = await this.paggModel.find().limit(limit).exec();
-        console.log(dt);
-        return dt;
+    async findAllDoc(page: number, limit: number): Promise<any> {
+        limit = limit < 100 ? limit : 100;
+        const dt = await this.paggModel
+            .find()
+            .limit(limit)
+            .skip(page * limit)
+            .exec();
+        const totalRow = await this.paggModel.estimatedDocumentCount().then(res => res);
+        const totalPage = Math.ceil(totalRow / limit);
+        return { totalDoc: totalRow, pageTotal: totalPage, data: dt };
     }
+
+
+
     async findOneDoc() {
         const dt = await this.paggModel.findOne({
             sn: 0,
@@ -24,6 +31,12 @@ export class PagginationService {
         }).exec();
         console.log("FindOne: ", dt);
         return dt;
+    }
+
+
+
+    async updateManyDoc() {
+        const dt = await this.paggModel.updateMany();
     }
 
 }

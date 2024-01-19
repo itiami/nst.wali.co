@@ -44,3 +44,9 @@ export class LargeJsonDto {
     greeting: string;
     friends: FriendDto[]
 }
+
+
+export class Page_LimitDto {
+    page: number;
+    limit: number;
+}

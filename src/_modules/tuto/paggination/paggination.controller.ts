@@ -2,20 +2,26 @@ import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { Request, Response } from "express";
 import axios, { AxiosRequestConfig } from 'axios';
 import { PagginationService } from './paggination.service';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Paggination")
 @Controller('pagg')
 export class PagginationController {
 
     constructor(private pagService: PagginationService) { };
 
 
+    @ApiOperation({ summary: "Get Data From MongoDB Atlas Cloud" })
+    @ApiQuery({ name: "page", example: 2 })
+    @ApiQuery({ name: "limit", example: 50 })
     @Get()
     async findAllDt(
+        @Query("page") page: number,
         @Query("limit") limit: number,
         @Res() res: Response
     ) {
         try {
-            const data = await this.pagService.findAll(+limit);
+            const data = await this.pagService.findAllDoc(+page, +limit);
             return res.status(201).json(data);
         } catch (err: any) {
             return res.status(404).json(err);

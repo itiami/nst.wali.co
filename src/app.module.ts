@@ -21,7 +21,7 @@ import { SharedModule } from './_shared/_shared.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['env/.env', 'env/.env.default', 'env/.env.db'],
+      envFilePath: ['.env/.env', '.env/.env.default', '.env/.env.db'],
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'assets')
