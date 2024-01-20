@@ -39,6 +39,18 @@ export class PagginationController {
     }
 
 
+    @Get("sn")
+    async autoIncrement(
+        @Res() res: Response
+    ) {
+        try {
+            await this.pagService.insetSerialAutoIncremental();
+            return res.status(201).json("Data Updated..");
+        } catch (err: any) {
+            return res.status(201).json(err);
+        }
+    }
+
 
     @Get("jsonServer")
     async pag(

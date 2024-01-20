@@ -12,7 +12,7 @@ export class PagginationService {
     async findAllDoc(page: number, limit: number): Promise<any> {
         limit = limit < 100 ? limit : 100;
         const dt = await this.paggModel
-            .find()
+            .find({}, { _id: false, sn: true, email: true }) // to set specific fields
             .limit(limit)
             .skip(page * limit)
             .exec();
@@ -34,9 +34,18 @@ export class PagginationService {
     }
 
 
+    // 
+    async insetSerialAutoIncremental() {
+        let counter = 1;
+        (await this.paggModel.find()).forEach(doc => {
+            this.paggModel.findOneAndUpdate(
+                { _id: doc._id },
+                { $set: { "sn": counter } }
+            );
+            counter++
+        });
 
-    async updateManyDoc() {
-        const dt = await this.paggModel.updateMany();
+        return await this.paggModel.find().skip(150).limit(2);
     }
 
 }
