@@ -6,17 +6,18 @@ import { ApiBody, ApiConsumes, ApiHeader, ApiOkResponse, ApiOperation, ApiProper
 import { CheckBoxDto, CreateLargeJsonDto, LargeJsonDto, MyDto, MyOptions } from './paggination.dto';
 import { ILargeJson, ILargeJsonDoc } from './paggination.interface';
 
-@ApiTags("Paggination")
-@Controller('pagg')
+@ApiTags("Axios with MongoDB Atlas")
+@Controller('atlas')
 export class PagginationController {
 
     constructor(private pagService: PagginationService) { };
 
 
-    @ApiOperation({ summary: "Get Data From MongoDB Atlas Cloud" })
+    @ApiOperation({ summary: "MongooseModule - MongoDB Atlas FindAll with query page and limit" })
     @ApiQuery({ name: "page", example: 2 })
     @ApiQuery({ name: "limit", example: 50 })
     //@ApiQuery({ name: 'myCheckbox', type: Boolean, required: false, description: 'A sample checkbox parameter' })
+    @ApiResponse({ description: "http://example.com/atlas?page=12499&limit=10" })
     @Get()
     async findAllDt(
         @Query("page") page: number,
@@ -35,7 +36,7 @@ export class PagginationController {
     }
 
 
-
+    @ApiOperation({ summary: "MongooseModule - MongoDB Atlas" })
     @Get("findOne")
     async findOneDt(
         @Res() res: Response
@@ -44,7 +45,7 @@ export class PagginationController {
         return res.status(201).json(data);
     }
 
-    @ApiOperation({ summary: "MongoDB Cloud Atlas Create a field with auto incremental value" })
+    @ApiOperation({ summary: "MongooseModule - MongoDB Cloud Atlas Create a field with auto incremental value" })
     @Get("sn")
     async autoIncrement(
         @Res() res: Response
@@ -57,8 +58,8 @@ export class PagginationController {
         }
     }
 
-
-    @Get("jsonServer")
+    @ApiOperation({ summary: "Fetch Data from - https://api.jsonserver.io using Axios Library" })
+    @Get("axios_jsonServer")
     async pag(
         @Res() res: Response
     ) {
@@ -88,7 +89,7 @@ export class PagginationController {
     // Fetch Data from - MongoDB Cloud Atlas using Axios Library
     @ApiOperation({ summary: "Fetch Data from - MongoDB Cloud Atlas using Axios Library" })
     @ApiBody({})
-    @Post("atlas_FindAll")
+    @Post("axios_FindAll")
     async atlasFindAll(
         @Body() body: any,
         @Res() res: Response
@@ -117,7 +118,7 @@ export class PagginationController {
     // Create Document in - MongoDB Cloud Atlas using Axios Library
     @ApiOperation({ summary: "Create using insertOne - MongoDB Cloud Atlas using Axios Library" })
     @ApiBody({ type: LargeJsonDto })
-    @Post("atlas_CreateDoc")
+    @Post("axios_CreateDoc")
     async atlasCreateDoc(
         @Body() body: LargeJsonDto,
         @Res() res: Response
