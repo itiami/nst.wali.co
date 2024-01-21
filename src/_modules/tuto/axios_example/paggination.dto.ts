@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsNumber, IsObject, IsString, isObject } from "class-validator";
+import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsObject, IsString, isObject } from "class-validator";
 
 export class LoginDto {
     @ApiProperty({ example: "aawali51000" })
@@ -73,57 +73,57 @@ export class LargeJsonDto {
 
     @ApiProperty({ example: "Wali" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     fname: string;
 
     @ApiProperty({ example: "ABDULLAH" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     lname: string;
 
     @ApiProperty({ example: "Male" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     gender: string;
 
     @ApiProperty({ example: "W3Soft" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     company: string;
 
     @ApiProperty({ example: "info@wali.co" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     email: string;
 
     @ApiProperty()
     @IsObject()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     login: LoginDto;
 
     @ApiProperty({ example: "+33 7 26 54 25 25" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     phone: string;
 
     @ApiProperty({ example: "http://imgs.com/wali" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     photo: string;
 
     @ApiProperty()
     @IsObject()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     address: AddressDto;
 
     @ApiProperty({ example: "Hi, Welcome to DesiSoft" })
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     greeting: string;
 
     @ApiProperty({ example: ["Karim", "James", "Alex"] })
     @IsArray()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     friends: FriendDto[];
 }
 
@@ -133,6 +133,34 @@ export class CreateLargeJsonDto {
     @IsObject()
     @IsNotEmpty()
     document: LargeJsonDto;
+}
+
+class FilterDataDto {
+    /* @ApiProperty({ example: "640834a7f4400957974b225f" })
+    @IsMongoId()
+    id: string; */
+
+    /* @ApiProperty({ example: "Wali" })
+    @IsString()
+    fname: string; */
+
+    @ApiProperty({ example: "ABDULLAH" })
+    @IsString()
+    lname: string;
+
+    @ApiProperty({ example: "info@wali.co" })
+    @IsString()
+    @IsNotEmpty()
+    email: string;
+}
+
+
+export class UpdateLargeJsonDto {
+    @ApiProperty()
+    filterDt: FilterDataDto
+
+    @ApiProperty()
+    newValue: LargeJsonDto;
 }
 
 

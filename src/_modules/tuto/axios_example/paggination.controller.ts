@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
-import { Response } from "express";
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, Res } from '@nestjs/common';
+import { Request, Response } from "express";
 import axios, { AxiosError } from 'axios';
 import { PagginationService } from './paggination.service';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LargeJsonDto, MyDto } from './paggination.dto';
+import { LargeJsonDto, MyDto, UpdateLargeJsonDto } from './paggination.dto';
 
 @ApiTags("Axios with MongoDB Atlas")
 @Controller('atlas')
@@ -89,7 +89,7 @@ export class PagginationController {
     @ApiOperation({ summary: "Fetch Data from - MongoDB Cloud Atlas using Axios Library" })
     @ApiBody({})
     @Post("axios_FindAll")
-    async atlasFindAll(
+    async axiosFindAllInAtlas(
         @Body() body: any,
         @Res() res: Response
     ) {
@@ -118,7 +118,7 @@ export class PagginationController {
     @ApiOperation({ summary: "Create using insertOne - MongoDB Cloud Atlas using Axios Library" })
     @ApiBody({ type: LargeJsonDto })
     @Post("axios_CreateDoc")
-    async atlasCreateDoc(
+    async axiosCreateDocInAtlas(
         @Body() body: LargeJsonDto,
         @Res() res: Response
     ) {
@@ -157,6 +157,66 @@ export class PagginationController {
                     return res.status(404).send(err);
                 });
         }
+    }
+
+
+    // Fetch Data from - MongoDB Cloud Atlas using Axios Library
+    @ApiOperation({ summary: "UpdateOne Data from - MongoDB Cloud Atlas using Axios Library" })
+    @ApiBody({ type: UpdateLargeJsonDto })
+    @Put("axios_updateOne")
+    async axiosUpdatefromAtlas(
+        @Body() body: UpdateLargeJsonDto,
+        @Res() res: Response
+    ) {
+        console.log(body.filterDt);
+        // console.log(body.newValue);
+        (await this.pagService.byAxios())
+            .post("/action/updateOne",
+                {
+                    dataSource: "Cluster0",
+                    database: "cDB",
+                    collection: "LargeJson",
+                    filter: body.filterDt,
+                    update: {
+                        $set: body.newValue
+                    }
+                }
+            )
+            .then(results => {
+                return res.status(201).json(results.data);
+            })
+            .catch((err: any) => {
+                return res.status(201).json(err);
+            });
+        //return (res.status(201).send(body)); // {"id": "640834a7f4400957974b1ecd"}
+    }
+
+
+    // Fetch Data from - MongoDB Cloud Atlas using Axios Library
+    @ApiOperation({ summary: "Fetch Data from - MongoDB Cloud Atlas using Axios Library" })
+    @ApiBody({})
+    @Delete("axios_Delete")
+    async axiosDeletefromAtlas(
+        @Query('del') del: string,
+        @Res() res: Response
+    ) {
+        (await this.pagService.byAxios())
+            .post("/action/deleteOne",
+                {
+                    dataSource: "Cluster0",
+                    database: "cDB",
+                    collection: "LargeJson",
+                    sort: { "_id": -1 },
+                    limit: 10,
+                    filter: {}
+                }
+            )
+            .then(results => {
+                return res.status(201).send(results.data);
+            })
+            .catch((err: AxiosError) => {
+                return res.status(404).send(err);
+            });
     }
 
 }
