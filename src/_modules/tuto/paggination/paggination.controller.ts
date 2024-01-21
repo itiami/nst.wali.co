@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { Request, Response } from "express";
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { PagginationService } from './paggination.service';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CheckBoxDto, MyDto, MyOptions } from './paggination.dto';
+import { ILargeJson, ILargeJsonDoc } from './paggination.interface';
 
 @ApiTags("Paggination")
 @Controller('pagg')
@@ -14,13 +16,17 @@ export class PagginationController {
     @ApiOperation({ summary: "Get Data From MongoDB Atlas Cloud" })
     @ApiQuery({ name: "page", example: 2 })
     @ApiQuery({ name: "limit", example: 50 })
+    //@ApiQuery({ name: 'myCheckbox', type: Boolean, required: false, description: 'A sample checkbox parameter' })
     @Get()
     async findAllDt(
         @Query("page") page: number,
         @Query("limit") limit: number,
-        @Res() res: Response
+        @Query() checkbox: MyDto,
+        @Res() res: Response,
     ) {
         try {
+            console.log(checkbox.option);
+
             const data = await this.pagService.findAllDoc(+page, +limit);
             return res.status(201).json(data);
         } catch (err: any) {
@@ -38,14 +44,14 @@ export class PagginationController {
         return res.status(201).json(data);
     }
 
-
+    @ApiOperation({ summary: "MongoDB Cloud Atlas Create a field with auto incremental value" })
     @Get("sn")
     async autoIncrement(
         @Res() res: Response
     ) {
         try {
-            await this.pagService.insetSerialAutoIncremental();
-            return res.status(201).json("Data Updated..");
+            const update = await this.pagService.insetSerialAutoIncremental();
+            return res.status(201).json(update);
         } catch (err: any) {
             return res.status(201).json(err);
         }
@@ -65,10 +71,6 @@ export class PagginationController {
             }
         };
 
-
-
-
-
         const fetchData = await axios.request(config)
             .then((response) => {
                 console.log(response.data.length);
@@ -84,48 +86,32 @@ export class PagginationController {
 
 
 
+    @ApiOperation({ summary: "MongoDB Cloud Atlas using Axios Library" })
     @Post("atlas")
     async atlas(
         @Body() body: any,
         @Res() res: Response
     ) {
-        let data = JSON.stringify({
-            "dataSource": "Cluster0",
-            "database": "cDB",
-            "collection": "LargeJson",
-            "filter": {
-                "_id": "640834a7f4400957974b1a6d"
-            }
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://data.mongodb-api.com/app/desisoft-bcrib/endpoint/desiSoft',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Request-Headers': '*',
-                'api-key': '4GHVv9V1PovD7DNWiFPU3a6VzFA9eC7qPk5HTcXbG9fj6SBQWqgXV4eUiivExmSB',
-                'Accept': 'application/json'
-            },
-            data: data
-        };
-
-        const fetchData = await axios.request(config)
-            .then((response) => {
-                console.log(response.data.document.length);
-                return response.data.document.length;
+        (await this.pagService.byAxios())
+            .post("/action/find",
+                {
+                    dataSource: "Cluster0",
+                    database: "cDB",
+                    collection: "LargeJson",
+                    sort: { "_id": -1 },
+                    limit: 10,
+                    filter: {}
+                }
+            )
+            .then(results => {
+                return res.status(201).send(results.data);
             })
-            .catch((error) => {
-                console.log(error);
+            .catch((err: AxiosError) => {
+                return res.status(404).send(err);
             });
-
-
-        return res.status(201).json(fetchData);
-
     }
 
-
-
-
 }
+
+
+

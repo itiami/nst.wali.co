@@ -1,3 +1,5 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class LoginDto {
     username: string;
     password: string;
@@ -46,7 +48,26 @@ export class LargeJsonDto {
 }
 
 
+
 export class Page_LimitDto {
     page: number;
     limit: number;
+}
+
+
+export class CheckBoxDto {
+    @ApiProperty({ description: 'Example checkbox', default: false })
+    exampleCheckbox: boolean;
+}
+
+
+export enum MyOptions {
+    Option1 = 'Option1',
+    Option2 = 'Option2',
+    Option3 = 'Option3',
+}
+
+export class MyDto {
+    @ApiProperty({ enum: MyOptions, enumName: 'MyOptions' })
+    option: MyOptions;
 }
