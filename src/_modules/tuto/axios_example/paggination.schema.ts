@@ -1,6 +1,4 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose from "mongoose";
-
 
 class Login {
     username: string;

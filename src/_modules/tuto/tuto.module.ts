@@ -3,10 +3,10 @@ import { DataManupulationController } from './data-manupulation/data-manupulatio
 import { EnvInfoController } from './env-info/env-info.controller';
 import { FileHandlingService } from './file_handling/file_handling.service';
 import { FileHandlingController } from './file_handling/file_handling.controller';
-import { PagginationController } from './paggination/paggination.controller';
-import { PagginationService } from './paggination/paggination.service';
+import { PagginationController } from './axios_example/paggination.controller';
+import { PagginationService } from './axios_example/paggination.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Paggination, PagginationSchema } from './paggination/paggination.schema';
+import { Paggination, PagginationSchema } from './axios_example/paggination.schema';
 import { Connection } from 'mongoose';
 
 
