@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { PagginationService } from './paggination.service';
 import { ApiBody, ApiConsumes, ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CheckBoxDto, MyDto, MyOptions } from './paggination.dto';
+import { CheckBoxDto, CreateLargeJsonDto, LargeJsonDto, MyDto, MyOptions } from './paggination.dto';
 import { ILargeJson, ILargeJsonDoc } from './paggination.interface';
 
 @ApiTags("Paggination")
@@ -85,10 +85,11 @@ export class PagginationController {
     }
 
 
-
-    @ApiOperation({ summary: "MongoDB Cloud Atlas using Axios Library" })
-    @Post("atlas")
-    async atlas(
+    // Fetch Data from - MongoDB Cloud Atlas using Axios Library
+    @ApiOperation({ summary: "Fetch Data from - MongoDB Cloud Atlas using Axios Library" })
+    @ApiBody({})
+    @Post("atlas_FindAll")
+    async atlasFindAll(
         @Body() body: any,
         @Res() res: Response
     ) {
@@ -109,6 +110,53 @@ export class PagginationController {
             .catch((err: AxiosError) => {
                 return res.status(404).send(err);
             });
+    }
+
+
+
+    // Create Document in - MongoDB Cloud Atlas using Axios Library
+    @ApiOperation({ summary: "Create using insertOne - MongoDB Cloud Atlas using Axios Library" })
+    @ApiBody({ type: LargeJsonDto })
+    @Post("atlas_CreateDoc")
+    async atlasCreateDoc(
+        @Body() body: LargeJsonDto,
+        @Res() res: Response
+    ) {
+        // find the last sn..
+        const lastDt = await (await this.pagService.byAxios())
+            .post("/action/find",
+                {
+                    dataSource: "Cluster0",
+                    database: "cDB",
+                    collection: "LargeJson",
+                    sort: { "_id": -1 },
+                    limit: 1,
+                    filter: {}
+                }
+            ).then(dt => {
+                return dt.data.documents
+            });
+
+        const lastSn = JSON.stringify(lastDt[0].sn);
+        //return res.status(201).send(lastSn);
+        if (lastSn) {
+            body.sn = parseInt(lastSn) + 1;
+            (await this.pagService.byAxios())
+                .post("/action/insertOne",
+                    {
+                        dataSource: "Cluster0",
+                        database: "cDB",
+                        collection: "LargeJson",
+                        document: body
+                    }
+                )
+                .then(results => {
+                    return res.status(201).send(results.data);
+                })
+                .catch((err: AxiosError) => {
+                    return res.status(404).send(err);
+                });
+        }
     }
 
 }

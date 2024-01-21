@@ -110,7 +110,6 @@ export class PagginationService {
 
 
     async byAxios() {
-
         const fetchData = await axios.create({
             baseURL: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nlcrg/endpoint/data/v1',
             headers: {
