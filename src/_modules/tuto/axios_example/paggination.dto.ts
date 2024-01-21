@@ -163,6 +163,11 @@ export class UpdateLargeJsonDto {
     newValue: LargeJsonDto;
 }
 
+export class DeleteLargeJsonDto {
+    @ApiProperty()
+    filterDt: FilterDataDto
+}
+
 
 export class Page_LimitDto {
     @ApiProperty()

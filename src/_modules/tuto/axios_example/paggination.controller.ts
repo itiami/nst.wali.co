@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 import axios, { AxiosError } from 'axios';
 import { PagginationService } from './paggination.service';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LargeJsonDto, MyDto, UpdateLargeJsonDto } from './paggination.dto';
+import { DeleteLargeJsonDto, LargeJsonDto, MyDto, UpdateLargeJsonDto } from './paggination.dto';
+import { url } from 'inspector';
 
 @ApiTags("Axios with MongoDB Atlas")
 @Controller('atlas')
@@ -171,7 +172,7 @@ export class PagginationController {
         console.log(body.filterDt);
         // console.log(body.newValue);
         (await this.pagService.byAxios())
-            .post("/action/updateOne",
+            .patch("/action/updateOne",
                 {
                     dataSource: "Cluster0",
                     database: "cDB",
@@ -194,10 +195,10 @@ export class PagginationController {
 
     // Fetch Data from - MongoDB Cloud Atlas using Axios Library
     @ApiOperation({ summary: "Fetch Data from - MongoDB Cloud Atlas using Axios Library" })
-    @ApiBody({})
-    @Delete("axios_Delete")
+    @ApiBody({ type: DeleteLargeJsonDto })
+    @Post("axios_Delete")
     async axiosDeletefromAtlas(
-        @Query('del') del: string,
+        @Body() body: DeleteLargeJsonDto,
         @Res() res: Response
     ) {
         (await this.pagService.byAxios())
@@ -206,15 +207,12 @@ export class PagginationController {
                     dataSource: "Cluster0",
                     database: "cDB",
                     collection: "LargeJson",
-                    sort: { "_id": -1 },
-                    limit: 10,
-                    filter: {}
+                    filter: body.filterDt
                 }
-            )
-            .then(results => {
+
+            ).then(results => {
                 return res.status(201).send(results.data);
-            })
-            .catch((err: AxiosError) => {
+            }).catch((err: AxiosError) => {
                 return res.status(404).send(err);
             });
     }
