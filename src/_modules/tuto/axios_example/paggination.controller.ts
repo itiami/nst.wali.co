@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
-import { Request, Response } from "express";
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import { Response } from "express";
+import axios, { AxiosError } from 'axios';
 import { PagginationService } from './paggination.service';
-import { ApiBody, ApiConsumes, ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CheckBoxDto, CreateLargeJsonDto, LargeJsonDto, MyDto, MyOptions } from './paggination.dto';
-import { ILargeJson, ILargeJsonDoc } from './paggination.interface';
+import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { LargeJsonDto, MyDto } from './paggination.dto';
 
 @ApiTags("Axios with MongoDB Atlas")
 @Controller('atlas')
