@@ -109,19 +109,19 @@ export class PagginationService {
     }
 
 
-    async byAxios() {
-        const fetchData = await axios.create({
-            baseURL: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nlcrg/endpoint/data/v1',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Request-Headers': '*',
-                'api-key': '4GHVv9V1PovD7DNWiFPU3a6VzFA9eC7qPk5HTcXbG9fj6SBQWqgXV4eUiivExmSB',
-                'Accept': 'application/json',
-            }
-        });
+async byAxios() {
+    const fetchData = await axios.create({
+        baseURL: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-nlcrg/endpoint/data/v1',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Request-Headers': '*',
+            'api-key': '4GHVv9V1PovD7DNWiFPU3a6VzFA9eC7qPk5HTcXbG9fj6SBQWqgXV4eUiivExmSB',
+            'Accept': 'application/json',
+        }
+    });
 
-        return fetchData;
-    }
+    return fetchData;
+}
 
 }
 

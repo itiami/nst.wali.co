@@ -4,7 +4,6 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './_modules/auth/auth.module';
-import { ProductsModule } from './_modules/products/products.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongodbServiceProvider } from './_providers/mongodb-service-provider/mongodb-service-provider';
 import { PostgresServiceProvider } from './_providers/postgres-service-provider/postgres-service-provider';
@@ -26,7 +25,6 @@ import { SharedModule } from './_shared/_shared.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'assets')
     }),
-    ProductsModule,
     AuthModule,
     TutoModule,
     TypeOrmModule.forRoot(typeOrmConfig),
